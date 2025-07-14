@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Compteur DOM</title>
+  <style>
+    /* Style général du body */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding-top: 80px; /* espace pour ne pas que le header masque le titre */
+      background-color: #f0f0f0;
+      height: 2000px; /* permet de scroller pour tester l'effet header */
+    }
+
+    /* Style du header */
+    header {
+      position: fixed;           /* reste en haut même quand on scrolle */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: #3498db; /* couleur par défaut */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease; /* transition douce */
+      z-index: 999;
+    }
+
+    /* Style quand le header est scrolled */
+    .scrolled {
+      background-color: #2c3e50; /* couleur après scroll */
+    }
+
+    /* Titre principal */
+    h1 {
+      color: #333;
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    /* Style du formulaire */
+    form {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* style spécifique pour le champ de texte */
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2em;
+      border: 2px solid #3498db;
+      border-radius: 5px;
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    /* Style du bouton de soumission */
+    button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Affichage du compteur */
+    #valeur {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    /* Style des boutons */
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    /* Couleurs des boutons */
+    #incrementer {
+      background-color: blue;
+      color: white;
+    }
+
+    #decrementer {
+      background-color: yellowgreen;
+      color: white;
+    }
+
+    #reinitialiser {
+      background-color: violet;
+      color: white;
+    }
+
+    /* Couleurs de survol */
+    #incrementer:hover {
+      background-color: green;
+    }
+
+    #decrementer:hover {
+      background-color: red;
+    }
+
+    #reinitialiser:hover {
+      background-color: orange;
+    }
+
+    /* Couleurs selon la valeur */
+    .negatif {
+      color: red;
+    }
+
+    .positif {
+      color: green;
+    }
+
+    .neutre {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER FIXE -->
+  <header id="mainHeader"><strong>Centre d'informatique</strong></header>
+
+  <!-- TITRE PRINCIPAL -->
+  <h1>Compteur</h1>
+
+  <!-- ZONE QUI AFFICHE LA VALEUR -->
+  <div id="valeur" class="neutre">0</div>
+
+  <!-- BOUTONS DE CONTRÔLE -->
+  <button id="incrementer">Incrémenter</button>
+  <button id="decrementer">Décrémenter</button>
+  <button id="reinitialiser">Réinitialiser</button>
+
+  <!-- SCRIPT DU COMPTEUR -->
+  <script>
+    let compteur = 0; // Initialisation de la variable compteur
+    const valeur = document.getElementById("valeur"); // Sélection du div compteur
+    const btnInc = document.getElementById("incrementer");
+    const btnDec = document.getElementById("decrementer");
+    const btnReset = document.getElementById("reinitialiser");
+
+    // Met à jour l'affichage du compteur
+    function mettreAJourAffichage() {
+      valeur.textContent = compteur;
+
+      if (compteur < 0) {
+        valeur.className = "negatif"; // rouge si négatif
+      } else if (compteur > 0) {
+        valeur.className = "positif"; // vert si positif
+      } else {
+        valeur.className = "neutre";  // noir si zéro
+      }
+    }
+
+    // Incrémenter
+    btnInc.addEventListener("click", () => {
+      compteur++;
+      mettreAJourAffichage();
+    });
+
+    // Décrémenter
+    btnDec.addEventListener("click", () => {
+      compteur--; 
+      mettreAJourAffichage();
+    });
+
+    // Réinitialiser
+    btnReset.addEventListener("click", () => {
+      compteur = 0;
+      mettreAJourAffichage();
+    });
+  </script>
+
+  <!-- CHAMP POUR TESTER LES ÉVÉNEMENTS CLAVIER -->
+
+  <h2>Tape quelque chose :</h2>
+  <input type="text" id="champTexte" placeholder="Écris ici...">
+
+  <script>
+    let champ = document.getElementById("champTexte");
+
+    // Affiche la touche tapée dans la console
+    champ.addEventListener("keypress", function(event) {
+      console.log("Touche tapée :", event.key);
+    });
+  </script>
+
+  <!-- SCRIPT POUR CHANGER LE STYLE DU HEADER QUAND ON SCROLLE -->
+  <script>
+    const header = document.getElementById("mainHeader");
+
+    // Événement de scroll
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 0) {
+        header.classList.add("scrolled"); // ajoute une classe
+      } else {
+        header.classList.remove("scrolled"); // retire la classe
+      }
+    });
+  </script>
+
+  <!-- FORMULAIRE AVEC SUBMIT -->
+<h2>Formulaire</h2>
+<form id="monFormulaire">
+  <input type="text" id="inputNom" placeholder="Entrez votre nom" required>
+  <button type="submit">Soumettre</button>
+</form>
+
+<script>
+  const form = document.getElementById("monFormulaire");
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    const nom = document.getElementById("inputNom").value;
+
+    if (nom.trim() === "") {
+      alert("Le champ est vide !");
+    } else {
+      alert("Merci, d'avoir soumis le formulaire !");
+    }
+  });
+</script>
+
+<script>
+
+  const description = " bienvenue dans le cours de javasripte pour le developpeur avancer ";
+  
+  // 1. Supprimer les espaces au début et à la fin
+  let sansEspaces = description.trim();
+  
+  // 2. Transformer toute la phrase en majuscules
+  let majuscule = sansEspaces.toUpperCase();
+  
+  // 3. Remplacer "developpeur" par "apprenant"
+  let remplacer = majuscule.replace("DEVELOPPEUR", "APPRENANT");
+  
+  // 4. Convertir la phrase en tableau de mots
+  let tableauMots = remplacer.split(" ");
+  
+  // Affichage dans la console
+  console.log("1. Sans espaces :", sansEspaces);
+  console.log("2. En majuscules :", majuscule);
+  console.log("3. Mot remplacé :", remplacer);
+  console.log("4. En tableau :", tableauMots);
+
+// Partie Number
+
+  // 1. Fonction genererCode()
+function genererCode() {
+  // Génère un nombre aléatoire entre 100000 et 900000
+  let code = Math.floor(Math.random() * (900000 - 100000) + 100000);
+  console.log("Code généré :", code);
+}
+
+genererCode();
+
+// 2. Arrondi vers le bas et vers le haut
+let prixInitial = 47.89;
+let arrondiBas = Math.floor(prixInitial);
+let arrondiHaut = Math.ceil(prixInitial);
+
+console.log("Prix initial :", prixInitial);
+console.log("Arrondi vers le bas :", arrondiBas);
+console.log("Arrondi vers le haut :", arrondiHaut);
+
+// 3. Formater en deux décimales avec toFixed(2)
+console.log("Arrondi haut (2 décimales) :", arrondiHaut.toFixed(2));
+console.log("Arrondi bas (2 décimales) :", arrondiBas.toFixed(2));
+
+// 4. Convertir "42.75" en nombre
+let chaine = "42.75";
+let nombre = parseFloat(chaine);
+console.log("Conversion de '42.75' :", nombre);
+
+
+// Partie Tableau
+
+let eleves = [
+  { nom: "Aliou", note: 14 },
+  { nom: "Mamoudou", note: 9 },
+  { nom: "Boubacar", note: 17 },
+  { nom: "Cellou", note: 11 }
+];
+
+console.log(" Liste initiale des élèves :", eleves);
+
+// 1 Supprimer le dernier élève
+eleves.pop();
+console.log("1 Après suppression du dernier élève :", eleves);
+
+// 2 Ajouter Tidiane avec 20
+eleves.push({ nom: "Tidiane", note: 20 });
+console.log("2 Après ajout de Tidiane :", eleves);
+
+// 3 Créer un nouveau tableau avec des notes +1
+let elevesMajores = eleves.map(eleve => ({
+  nom: eleve.nom,
+  note: eleve.note + 1
+})); 
+console.log("3 Tableau avec notes majorées de +1 :", elevesMajores);
+
+// 4 Filtrer les élèves ayant une note ≥ 12
+let elevesAdmis = eleves.filter(eleve => eleve.note >= 12);
+console.log("4 Élèves ayant une note ≥ 12 :", elevesAdmis);
+
+// 5 Calculer la somme des notes originales
+let sommeNotes = eleves.reduce((total, eleve) => total + eleve.note, 0);
+console.log("5 Somme des notes :", sommeNotes);
+
+// 6 Trier les élèves par note croissante
+let elevesTries = [...eleves].sort((a, b) => a.note - b.note);
+console.log("6 Éléments triés par note croissante :", elevesTries);
+
+// 7 Inverser l’ordre du tableau
+let elevesInverses = [...eleves].reverse();
+console.log("7 Élèves en ordre inversé :", elevesInverses);
+
+// 8 Générer une phrase avec tous les prénoms
+let phrase = eleves.map(eleve => eleve.nom).join(", ");
+console.log("8 Phrase avec tous les prénoms :", phrase);
+
+
+const contacts = {
+  "Aïssatou": { phone: "622-100-100", email: "aissatou@example.com" },
+  "Mamadou": { phone: "622-200-200", email: "mamadou@example.com" },
+  "Fatoumata": { phone: "622-300-300", email: "fatoumata@example.com" }
+};
+
+// 1. Afficher tous les noms de contacts
+console.log("Noms des contacts:");
+console.log(Object.keys(contacts));
+
+// 2. Lister tous les numéros de téléphone
+console.log("\nNuméros de téléphone:");
+const phoneNumbers = Object.values(contacts).map(contact => contact.phone);
+console.log(phoneNumbers);
+
+// 3. Afficher les paires nom/numéro sous forme "Nom: Numéro"
+console.log("\nContacts (Nom: Numéro):");
+for (const [name, info] of Object.entries(contacts)) {
+  console.log(`${name}: ${info.phone}`);
+}
+
+// 4. Fonction getContactInfo(name)
+function getContactInfo(name) {
+  const contact = contacts[name];
+  if (contact) {
+    return `${name} - Tel: ${contact.phone}, Email: ${contact.email}`;
+  }
+  return "Contact non trouvé";
+}
+console.log("\nInfo de Fatoumata:");
+console.log(getContactInfo("Fatoumata"));
+
+// 5. Ajouter un nouveau contact
+contacts["Votre nom"] = { 
+  phone: "622-400-400", 
+  email: "votre.nom@example.com" 
+};
+console.log("\nAprès ajout d'un nouveau contact:");
+console.log(contacts);
+
+// 6. Supprimer le contact "Mamadou"
+delete contacts.Mamadou;
+console.log("\nAprès suppression de Mamadou:");
+console.log(contacts);
+
+
+
+
+// 1. Afficher uniquement l'année actuelle
+const currentYear = new Date().getFullYear();
+console.log("Année actuelle :", currentYear);
+
+// 2. Fonction qui calcule l'âge à partir d'une année de naissance
+function calculerAge(anneeNaissance) {
+  const anneeActuelle = new Date().getFullYear();
+  return anneeActuelle - anneeNaissance;
+}
+
+// Exemple d'utilisation
+const age = calculerAge(1990);
+console.log("Âge actuel :", age);
+
+// 3. Formater une date au format JJ/MM/AAAA
+function formaterDate(date) {
+  const jour = String(date.getDate()).padStart(2, '0');
+  const mois = String(date.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+  const annee = date.getFullYear();
+  return `${jour}/${mois}/${annee}`;
+}
+
+// Exemple d'utilisation
+const aujourdHui = new Date();
+console.log("Date formatée :", formaterDate(aujourdHui));
+
+// Version alternative pour formater la date actuelle en une ligne
+console.log("Date actuelle formatée :", new Date().toLocaleDateString('fr-FR'));
+
+
+// Exercice 1 - Destructuration d'objet
+const personne = {
+  nom: "Jean",
+  age: 30,
+  ville: "Paris"
+};
+
+// Destructuration pour extraire nom et age
+const { nom, agev } = personne;
+console.log(`Nom: ${nom}, Âge: ${age}`); // Affiche: Nom: Jean, Âge: 30
+
+// Exercice 2 - Destructuration de tableau
+const couleurs = ["Rouge", "Vert", "Bleu"];
+
+// Destructuration pour extraire la première et troisième couleur
+const [premiereCouleur, , troisiemeCouleur] = couleurs;
+console.log(`Première couleur: ${premiereCouleur}, Troisième couleur: ${troisiemeCouleur}`); 
+// Affiche: Première couleur: Rouge, Troisième couleur: Bleu
+
+// Version alternative avec indices différents
+const [couleur1, , couleur3] = couleurs;
+console.log(`Couleur 1: ${couleur1}, Couleur 3: ${couleur3}`);
+
+
+  </script>
+
+</body>
+</html>
+

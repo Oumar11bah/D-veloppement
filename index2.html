@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Changer la couleur des boutons</title>
+  <style>
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Trois boutons -->
+  <button>Premier</button>
+  <button>Deuxième</button>
+  <button>Troisième</button>
+
+  <script>
+    // Récupérer tous les boutons
+    const boutons = document.querySelectorAll("button");
+
+    // Méthode forEach pour changer la couleur de chaque bouton
+    boutons.forEach(function(btn) {
+      btn.style.backgroundColor = "skyblue";
+      btn.style.color = "white";
+      
+    });
+  </script>
+
+<button id="monBouton">Clique-moi</button>
+  <p id="message"></p>
+
+  <script>
+    const bouton = document.getElementById("monBouton");
+    const message = document.getElementById("message");
+
+   
+    function auClic() {
+      alert("vous avez cliquer sur un button!");
+      bouton.removeEventListener("click", auClic);
+       
+    }
+    bouton.addEventListener("click", auClic);
+  </script>
+
+
+</body>
+</html>
+
